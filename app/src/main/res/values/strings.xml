@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Credit Management</string>
+    <string name="dialog_title">Enter Amount</string>
+    <string name="confirm">Confirm</string>
+    <string name="receivers_text">Select the user to transfer the money</string>
+    <string name="rs">\u20B9</string>
+</resources>
