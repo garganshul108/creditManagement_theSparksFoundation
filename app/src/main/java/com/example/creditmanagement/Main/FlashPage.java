@@ -14,6 +14,7 @@ public class FlashPage extends AppCompatActivity implements Runnable{
     LinearLayout flash_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flash_page);
         flash_text = findViewById(R.id.flash_text);

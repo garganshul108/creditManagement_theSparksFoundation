@@ -3,7 +3,7 @@ package com.example.creditmanagement.Main.Users;
 import java.io.Serializable;
 
 public class Model implements Serializable , Comparable<Model> {
-    String name , credit;
+    private String name , credit;
 
     public String getName() {
         return name;
@@ -13,11 +13,11 @@ public class Model implements Serializable , Comparable<Model> {
         this.name = name;
     }
 
-    public String getCredit() {
+    String getCredit() {
         return credit;
     }
 
-    public void setCredit(String credit) {
+    void setCredit(String credit) {
         this.credit = credit;
     }
 
