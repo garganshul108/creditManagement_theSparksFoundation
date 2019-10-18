@@ -1,6 +1,7 @@
 package com.example.creditmanagement.Main.Users;
 
 import android.app.Dialog;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private ArrayList<Model> mDatasets = new ArrayList<>();
     Stack<Model> sender = new Stack<>();
     private MainActivity context;
-    int previousPosition = 0;
+    private int previousPosition = 0;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         TextView name , credit;
-        public MyViewHolder(View v) {
+        MyViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.name);
             credit = v.findViewById(R.id.credit);
@@ -36,14 +37,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(ArrayList<Model> myDatasets , MainActivity context) {
+    MyAdapter(ArrayList<Model> myDatasets, MainActivity context) {
         this.mDatasets = myDatasets;
         this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                      int viewType) {
         // create a new view
         View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
@@ -58,6 +60,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         // - replace the contents of the view with that element
         if(mDatasets.get(position).getName() != null)
             holder.name.setText(mDatasets.get(position).getName());
+
         if(mDatasets.get(position).getCredit() != null){
             String c = context.getResources().getString(R.string.rs)+mDatasets.get(position).getCredit();
             holder.credit.setText(c);
@@ -66,6 +69,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         if(position > previousPosition){ //we are scrolling down..
             AnimationUtil.animate(holder , true);
         }
+
         else {//we are scrolling up
             AnimationUtil.animate(holder , false);
         }
@@ -75,6 +79,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(sender.isEmpty()){
                     sender.push(mDatasets.remove(position));
                     context.stack_empty = false;
@@ -82,7 +87,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     context.dynamic_tv.setVisibility(View.VISIBLE);
                     AnimationUtil.animateView(context.dynamic_tv , true);
                 }
+
                 else{
+
                     final Dialog dialog = new Dialog(context);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.amount_box);
@@ -92,7 +99,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     confirm_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Double amount = Double.parseDouble(credit.getText().toString());
+
+                            double amount = Double.parseDouble(credit.getText().toString());
                             if(Double.parseDouble(sender.peek().getCredit() ) >= amount){
                                 Double receivers_total_amount = Double.parseDouble(mDatasets.get(position).getCredit())
                                         + amount;
@@ -112,7 +120,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                             }
 
                             else {
-                                Toast.makeText(context , "Sorry you have insufficient amount.." , Toast.LENGTH_LONG).show();
+                                Toast.makeText(context , "Sorry you have insufficient amount." , Toast.LENGTH_LONG).show();
                                 mDatasets.add(sender.pop());
                                 context.stack_empty = true;
                                 Collections.sort(mDatasets);
@@ -124,6 +132,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     });
 
                 }
+
             }
         });
 

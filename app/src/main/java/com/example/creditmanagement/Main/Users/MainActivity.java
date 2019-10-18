@@ -21,26 +21,32 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     MyAdapter adapter;
-    ProgressBar progressBar;
-    ArrayList<Model> users = new ArrayList<>();
+    private ProgressBar progressBar;
+    private ArrayList<Model> users = new ArrayList<>();
     TextView dynamic_tv;
     boolean stack_empty = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initViews();
+
         progressBar.setVisibility(View.VISIBLE);
+
         recyclerView.hasFixedSize();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
         adapter.notifyDataSetChanged();
 
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().getReference("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot child: dataSnapshot.getChildren()){
@@ -48,10 +54,13 @@ public class MainActivity extends AppCompatActivity {
                         model.setName(child.getKey());
                         model.setCredit(child.getValue(String.class));
                         users.add(model);
+
                         }
+
                         progressBar.setVisibility(View.INVISIBLE);
                         Collections.sort(users);
                         adapter.notifyDataSetChanged();
+
                     }
 
 
@@ -63,22 +72,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initViews(){
+
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new MyAdapter(users , this);
         progressBar = findViewById(R.id.progressBar);
         dynamic_tv = findViewById(R.id.dynamic_tv);
+
     }
 
     @Override
     public void onBackPressed() {
         if(stack_empty)
             super.onBackPressed();
+
         else
             users.add(adapter.sender.pop());
-            stack_empty = true;
-            Collections.sort(users);
-            adapter.notifyDataSetChanged();
-            dynamic_tv.setVisibility(View.GONE);
+
+        stack_empty = true;
+        Collections.sort(users);
+        adapter.notifyDataSetChanged();
+        dynamic_tv.setVisibility(View.GONE);
 
     }
 }
